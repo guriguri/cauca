@@ -2,4 +2,6 @@
 /classes
 /.settings
 **/.settings
+.classpath
+.project
 .README*
