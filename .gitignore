@@ -6,7 +6,7 @@
 .project
 .README*
 /target
-**/target/
+**/target
 /lib
 /classes
 /checkouts
