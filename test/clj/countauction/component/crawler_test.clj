@@ -5,10 +5,15 @@
             [courtauction.component.crawler :as crawler]
             [courtauction.log :as log]
             [courtauction.config :as config]
-            [clj-http.client :as client])
+            [clj-http.client :as client]
+            )
   )
 
 (deftest get-list
   (config/config-yaml "/application-context.yaml")
-  (crawler/get-list!)
+  (def sido (get (config/get-value :location.SidoCd) 0))
+  (doseq [tSigu (config/get-value :location.SiguCd)]
+    (def sigu (get (. tSigu split ",") 0))
+    (get-list! sido sigu)
+    )
   )

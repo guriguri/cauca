@@ -1,6 +1,9 @@
 ########## These all have default values as shown
 
-location.codes:
+location.SidoCd:
+    - 41, 경기도
+
+location.SiguCd:
     - 820, 가평군
     - 281, 고양시 덕양구
     - 471, 고양시 덕양구
