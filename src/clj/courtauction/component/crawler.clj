@@ -1,14 +1,11 @@
-(ns courtauction.httpclient-test
-  (:use [clojure test]      
-        ) 
+(ns courtauction.component.crawler
   (:require [courtauction.component.application-context :as application-context]
             [courtauction.log :as log]
             [courtauction.config :as config]
             [clj-http.client :as client])
   )
 
-(deftest get-list
-  (config/config-yaml "/application-context.yaml")
+(defn get-list! []
   (doseq [tmp (config/get-value :location.codes)]
     (do
       (def info (. tmp split ","))
@@ -70,3 +67,8 @@
       )
     )
   )
+
+(defn -main
+  ([]
+   (config/config-yaml "/application-context.yaml") 
+   (get-list!)))
