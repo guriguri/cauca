@@ -70,10 +70,9 @@
                             }
                            )
       )
-    (println "XXXXX" (:content (map (get [(getbyitemprop (:body resp) :class "Ltbl_list")] 0))))
-    (doseq [node (:content (getbyitemprop (:body resp) :class "Ltbl_list"))]
-      (println node)
-      (if (= (:tag node) :tbody)
+;    (println "XXXXX" (:content (getbyitemprop (:body resp) :class "Ltbl_list")))
+    (doseq [node (getbyitemprop (:body resp) :class "Ltbl_list")]
+      (if (= (:tag (:content node)) :tbody)
         (println "XXXXX, " node))
       )
 ;    (println (:body resp))
