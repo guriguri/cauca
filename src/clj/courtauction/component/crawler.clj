@@ -1,10 +1,17 @@
 (ns courtauction.component.crawler
-  (:require [courtauction.component.application-context :as application-context]
+  (:require [courtauction.beans :as beans]
             [courtauction.log :as log]
             [courtauction.config :as config]
             [clj-http.client :as client]
+            [net.cgrand.enlive-html :as e] 
             )
   )
+
+(defn getbyitemprop
+  "Extract node content from HTML"
+  [html key value]
+  (e/select-nodes* (e/html-snippet html)
+                   [(e/attr= key value)]))
 
 (defn get-list! [sido sigu]
   (do
@@ -20,7 +27,6 @@
                                       "Keep-Alive" "300"
                                       "Connection" "keep-alive"
                                       "Referer"	"https://www.courtauction.go.kr/RetrieveMainInfo.laf"
-                                      "Cookie" "WMONID=MwsvVLqo_MW; daepyoSidoCd=41; daepyoSiguCd=410; mvmPlaceSidoCd=; mvmPlaceSiguCd=; rd1Cd=; rd2Cd=; realVowel=35207_45207; roadPlaceSidoCd=; roadPlaceSiguCd=; vowelSel=35207_45207; page=default20"
                                       }
                             :form-params {
                                           :_CUR_CMD	"RetrieveMainInfo.laf"
@@ -64,18 +70,24 @@
                             }
                            )
       )
-    (println (:body resp))
-;    (println (get info 0) (get info 1))
-    )
+    (println "XXXXX" (:content (map (get [(getbyitemprop (:body resp) :class "Ltbl_list")] 0))))
+    (doseq [node (:content (getbyitemprop (:body resp) :class "Ltbl_list"))]
+      (println node)
+      (if (= (:tag node) :tbody)
+        (println "XXXXX, " node))
+      )
+;    (println (:body resp))
+)
   )
 
 (defn -main
   ([]
+  (log/configure-logback "/courtauction-logback.xml")
     (config/config-yaml "/application-context.yaml") 
-    (def sido (get (config/get-value :location.SidoCd) 0))
-    (doseq [tSigu (config/get-value :location.SiguCd)]
+    (def sido (get (. (config/get-value :location.SidoCd) split ",") 0))
+  (doseq [tSigu (config/get-value :location.SiguCd)]
       (def sigu (get (. tSigu split ",") 0))
-      (get-list! sido sigu)
+    (get-list! sido sigu)
       )
     )
   )

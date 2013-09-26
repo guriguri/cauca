@@ -1,13 +1,12 @@
-(ns courtauction.component.application-context 
+(ns courtauction.beans
   (:use [courtauction.util]) 
   (:require [courtauction.log :as log]
             [courtauction.config :as config])
   )
 
-(def app-cxt-map (ref nil))
-(def memcache-server "127.0.0.1")
+(def beans-map (ref nil))
 
-(defn- application-context []  
+(defn- beans []  
   (log/configure-logback "/courtauction-logback.xml")
   (config/config-yaml "/application-context.yaml")
   
@@ -26,7 +25,7 @@
 ;  )
 )
 
-(defn get-obj [obj-name] 
-  (load-resource app-cxt-map application-context)
-  (dosync (get @app-cxt-map obj-name))
+(defn get-obj [key] 
+  (load-resource beans-map beans)
+  (dosync (get @beans-map key))
   )
