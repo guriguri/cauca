@@ -11,14 +11,14 @@
 
 (defn set-courtauction [cols]
   (struct courtauction
-          (e/select-nodes* (:content (get cols 1)) [(e/tag= :b)])
-          (get cols 2)
-          (get cols 3)
-          (get cols 4)
-          (get cols 5)
-          (get cols 6)
-          (get cols 7)
-          )
+          (:content (get (vec (e/select-nodes* (:content (get cols 1)) [(e/tag= :b)])) 0))
+                                                         (get cols 2)
+                                                         (get cols 3)
+                                                         (get cols 4)
+                                                         (get cols 5)
+                                                         (get cols 6)
+                                                         (get cols 7)
+                                                         )
   )
 
 (defn courtauction-parser [html]
