@@ -1,4 +1,6 @@
 (ns courtauction.component.crawler
+  (:use [courtauction.domain]
+        )
   (:require [courtauction.beans :as beans]
             [courtauction.log :as log]
             [courtauction.config :as config]
@@ -7,16 +9,29 @@
             )
   )
 
+(defn set-courtauction [cols]
+  (struct courtauction
+          (e/select-nodes* (:content (get cols 1)) [(e/tag= :b)])
+          (get cols 2)
+          (get cols 3)
+          (get cols 4)
+          (get cols 5)
+          (get cols 6)
+          (get cols 7)
+          )
+  )
+
 (defn courtauction-parser [html]
   (def nodes (e/html-snippet (:body resp)))
   (doseq [rows (e/select-nodes* nodes [
                                            (e/attr= :class "Ltbl_list")
                                            (e/tag= :tbody)
                                            (e/tag= :tr)])]
-    (def cols (e/select-nodes* (:content rows) [(e/tag= :td)]))
-    (println (count cols) (type cols))
-    (println (get (vec cols) 0))
-    )
+    (def cols (vec (e/select-nodes* (:content rows) [(e/tag= :td)])))
+    (def a-courtauction (set-courtauction cols))
+    (println "-----")
+    (println (:id a-courtauction))
+     )
 ;    (doseq [td (filter (comp not nil? val) (:content node))]
 ;      (println "-----")
 ;      (println (:content td))
@@ -30,7 +45,7 @@
                             :headers {
                                       "Host" "www.courtauction.go.kr"
                                       "User-Agent" "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.8; ko; rv:1.9.0.14) Gecko/2009082706 Firefox/3.0.14"
-                                               "Accept" "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+                                                "Accept" "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
                                       "Accept-Language" "ko-KR,ko;q=0.8,en-US;q=0.5,en;q=0.3"
                                       "Accept-Charset" "windows-949,utf-8;q=0.7,*;q=0.7"
                                       }
@@ -56,7 +71,7 @@
                                           :vowelSel "00000_55203" 
                                           }
                             }
-                             )
+                              )
       )
     (courtauction-parser (:body resp)) 
     )
