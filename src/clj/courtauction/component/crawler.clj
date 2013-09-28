@@ -16,18 +16,25 @@
   (map #(string/trim (string/replace % #"\n" " ")) (seq [addr area]))
   )
 
+(defn get-auction-info [auction-info]
+  (def auction-agent (first auction-info))
+  (def info (re-seq #"'[^']+'" (:onclick (:attrs (second auction-info)))))
+  (def auction-tel (first info))
+  (def auction-date (second info))
+  (def auction-salesroom (nth info 2))
+  (map #(string/trim (string/replace % #"'" ""))
+       (seq [auction-agent auction-tel auction-date auction-salesroom]))
+  )
 
 (defn set-courtauction [cols]
   (struct courtauction
           (:content (first (e/select-nodes* (:content (nth cols 1)) [(e/tag= :b)]))) ; :id
           (map #(string/trim %) (filter #(= (map? %) false) (:content (nth cols 2)))) ; :type-info 
           (get-addr-info (:content (first (e/select-nodes* (:content (nth cols 3)) [(e/tag= :div)])))) ; :addr-info
-          (map #(string/trim %) (:content (nth cols 4))) ; :remarks
-;          (e/select-nodes* (:content (nth cols 5)) [(e/tag= :div)]); :value
-          (map #(:content %) (e/select-nodes* (:content (nth cols 5)) [(e/tag= :div)])); :value
-          
-          (nth cols 6) ; :auction-info
-          (nth cols 7) ; :status
+          (map #(string/trim (string/replace % #"\n" " ")) (:content (nth cols 4))) ; :remarks
+          (map #(string/trim (first (:content %))) (e/select-nodes* (:content (nth cols 5)) [(e/tag= :div)])); :value-info
+          (get-auction-info (:content (first (e/select-nodes* (:content (nth cols 6)) [(e/tag= :div)])))) ; :auction-info
+          (map #(string/trim %) (filter #(= (map? %) false) (:content (nth cols 7)))) ; :status
           )
   )
 
@@ -40,7 +47,8 @@
     (def cols (e/select-nodes* (:content rows) [(e/tag= :td)]))
     (def a-courtauction (set-courtauction cols))
     (println "-----")
-    (println (:value a-courtauction))
+    (println a-courtauction)
+;    (println (:status a-courtauction))
     )
   )
 
