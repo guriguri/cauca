@@ -14,7 +14,9 @@
                  [clj-yaml "0.4.0"]
                  [clj-http "0.7.2"]
                  [enlive "1.0.0"]
-                 ]
+                 [org.clojure/java.jdbc "0.3.0-alpha5"]
+                 [mysql/mysql-connector-java "5.1.25"]
+                  ]
   
    :repositories [["java.net" "http://download.java.net/maven/2"]
                  ["conjars" "http://conjars.org/repo"]

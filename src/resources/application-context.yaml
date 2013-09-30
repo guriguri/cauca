@@ -1,14 +1,19 @@
 ########## These all have default values as shown
 
+db.subprotocol: "mysql"
+db.subname: "//v-eagle01:3306/courtauction"
+db.user: "courtauction"
+db.password: "courtauction.1234"
+
 location.SidoCd:
-    - 11, 서울특별시
+#    - 11, 서울특별시
 #    - 26, 부산광역시
 #    - 27, 대구광역시
 #    - 28, 인천광역시
 #    - 29, 광주광역시
 #    - 30, 대전광역시
 #    - 31, 울산광역시
-#    - 36, 세종특별자치시
+    - 36, 세종특별자치시
 #    - 41, 경기도
 #    - 42, 강원도
 #    - 43, 충청북도

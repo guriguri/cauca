@@ -48,39 +48,32 @@
   (let [caInfo (map #(trim % 0) (filter #(not-empty (trim % 0)) (map #(get-value % :content) (:content (first (:content (nth cols 1)))))))
         itemInfo (map #(string/trim %) (filter #(= (map? %) false) (:content (nth cols 2))))
         addrInfo (get-addr-info (:content (first (e/select-nodes* (:content (nth cols 3)) [(e/tag= :div)]))))
-        addrs (. (first addrInfo) split " ")
+        addrs (map #(string/trim %) (filter #(not-empty %) (. (first addrInfo) split " ")))
         remarks (map #(string/trim (string/replace % #"\n" " ")) (:content (nth cols 4)))
         valueInfo (map #(string/trim (first (:content %))) (e/select-nodes* (:content (nth cols 5)) [(e/tag= :div)]))
         auctionInfo (get-auction-info (:content (first (e/select-nodes* (:content (nth cols 6)) [(e/tag= :div)]))))
         status (map #(string/trim %) (filter #(= (map? %) false) (:content (nth cols 7))))
         ]
-    (println (count caInfo) caInfo)
-    (println (count itemInfo) itemInfo)
-    (println (count addrInfo) addrInfo)
-    (println remarks)
-    (println (count valueInfo) valueInfo)
-    (println (count auctionInfo) auctionInfo)
-    (println status)
     (struct courtauction
-       nil 
-       (nth caInfo 1) ;:caNo
-       (str caInfo) ;:caDesc
-       (nth itemInfo 0) ;:itemNo
-       (nth itemInfo 1) ;:itemType
-       (nth addrs 0) ;:addr0
-       (nth addrs 1) ;:addr1
-       (nth addrs 2) ;:addr2
-       addrs ;:addr3
-        (nth addrInfo 1) ;:addrInfo
-        remarks ;:remarks
-        (nth valueInfo 0) ;:value
-        (nth valueInfo 1) ;:valueMin
-        (nth auctionInfo 0) ;:auctionInfo
-        (nth auctionInfo 1) ;:auctionTel
-        (nth auctionInfo 2) ;:auctionDate
-        (nth auctionInfo 3) ;:auctionLoc
-        status ;:status
-        )
+            nil 
+            (nth caInfo 1) ;:caNo
+            (string/join " " caInfo) ;:caDesc
+            (nth itemInfo 0) ;:itemNo
+            (nth itemInfo 1) ;:itemType
+            (nth addrs 0) ;:addr0
+            (nth addrs 1) ;:addr1
+            (nth addrs 2) ;:addr2
+            (string/join " " addrs) ;:addr
+            (nth addrInfo 1) ;:addrInfo
+            (nth remarks 0);:remarks
+            (nth valueInfo 0) ;:value
+            (nth valueInfo 1) ;:valueMin
+            (nth auctionInfo 0) ;:auctionInfo
+            (nth auctionInfo 1) ;:auctionTel
+            (nth auctionInfo 2) ;:auctionDate
+            (nth auctionInfo 3) ;:auctionLoc
+            (nth status 0) ;:status
+            )
     )
   )
 
@@ -160,7 +153,6 @@
                                })
                  )
         (ref-set courtauctions @(courtauction-parser (:body @resp)))
-         (println courtauctions)
         (alter all-courtauctions into @courtauctions)
         )
       (if (= (count @courtauctions) page-size)

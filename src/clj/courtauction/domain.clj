@@ -4,6 +4,6 @@
 
 (defstruct courtauction
   :id :caNo :caDesc :itemNo :itemType
-  :addr0 :addr1 :addr2 :addr3 :addrInfo
+  :addr0 :addr1 :addr2 :addr :addrInfo
   :remarks :value :valueMin :auctionInfo :auctionTel
   :auctionDate :auctionLoc :status)
