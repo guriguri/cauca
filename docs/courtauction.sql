@@ -1,3 +1,12 @@
+/* CREATE USER */
+-- 
+-- CREATE USER 'courtauction'@'%' IDENTIFIED BY 'courtauction.1234';
+-- GRANT ALL PRIVILEGES ON courtauction.* TO 'courtauction'@'%' WITH GRANT option;
+-- FLUSH PRIVILEGES;
+--
+/* CREATE DATABASE */
+-- CREATE DATABASE courtauction;
+
 CREATE TABLE courtauction (
 	id INT(11) NOT NULL AUTO_INCREMENT,
 	caNo VARCHAR(16) NOT NULL,
