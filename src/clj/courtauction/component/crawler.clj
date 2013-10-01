@@ -87,9 +87,14 @@
     (doseq [rows (e/select-nodes* nodes [(e/attr= :class "Ltbl_list")
                                          (e/tag= :tbody)
                                          (e/tag= :tr)])]
-      (dosync (alter courtauctions conj
-                     (set-courtauction
-                       (e/select-nodes* (:content rows) [(e/tag= :td)]))))
+      (try 
+        (dosync (alter courtauctions conj
+                       (set-courtauction
+                         (e/select-nodes* (:content rows) [(e/tag= :td)]))))
+        (catch Exception e
+          (println (e/select-nodes* (:content rows) [(e/tag= :td)]))
+          (.printStackTrace e))
+        )
       )
     courtauctions
     )
@@ -167,28 +172,33 @@
     ) 
   )
 
+(defn add-courtauctions! [dao-impl# sido page-size]
+  (let [sido-code (first (. sido split ","))
+        courtauctions (ref nil)]
+    (doseq [sigu @(get-sigu-list! sido-code)]
+      (dosync
+        (ref-set courtauctions @(get-auction-list! sido-code (:id sigu) page-size))
+        )
+      (doseq [courtauction @courtauctions]
+        (try
+          (.add-courtauction dao-impl# courtauction)
+          (catch Exception e 
+            (println e courtauction)
+            )
+          )
+        )
+      (println "sido=" sido ", sigu=" sigu ", rows.count=" (count @courtauctions))
+      )
+    )
+  )
+
 (defn -main
   ([]
   (log/configure-logback "/courtauction-logback.xml")
   (config/config-yaml "/application-context.yaml") 
-  (doseq [sido (config/get-value :location.SidoCd)]
-    (let [dao-impl# (beans/get-obj :courtauction-dao)
-          sido-code (first (. sido split ","))
-          courtauctions (ref nil)]
-      (doseq [sigu @(get-sigu-list! sido-code)]
-        (dosync
-          (ref-set courtauctions @(get-auction-list! sido-code (:id sigu) 20))
-          )
-        (println "sido=" sido ", sigu=" sigu ", rows.count=" (count @courtauctions))
-        (doseq [courtauction @courtauctions]
-          (try
-            (.add-courtauction dao-impl# courtauction)
-            (catch Exception e 
-              (println e courtauction)
-              )
-            )
-          )
-        )
+  (let [dao-impl# (beans/get-obj :courtauction-dao)]
+    (doseq [sido (config/get-value :location.SidoCd)]
+      (add-courtauctions! dao-impl# sido 20)
       )
     )
   )
