@@ -66,8 +66,8 @@
             (string/join " " addrs) ;:addr
             (nth addrInfo 1) ;:addrInfo
             (nth remarks 0);:remarks
-            (nth valueInfo 0) ;:value
-            (nth valueInfo 1) ;:valueMin
+            (string/replace (nth valueInfo 0) "," "") ;:value
+            (string/replace (nth valueInfo 1) "," "") ;:valueMin
             (nth auctionInfo 0) ;:auctionInfo
             (nth auctionInfo 1) ;:auctionTel
             (nth auctionInfo 2) ;:auctionDate
@@ -168,11 +168,18 @@
   (log/configure-logback "/courtauction-logback.xml")
   (config/config-yaml "/application-context.yaml") 
   (doseq [sido (config/get-value :location.SidoCd)]
-    (let [sido-code (first (. sido split ","))]
+    (let [dao-impl# (beans/get-obj :courtauction-dao)
+          sido-code (first (. sido split ","))
+          courtauctions (ref nil)]
       (doseq [sigu @(get-sigu-list! sido-code)]
-;        (log/log-message "sido=" sido ", sigu=" sigu ", rows.count="
-(println "sido=" sido ", sigu=" sigu ", rows.count="
-                 (count @(get-auction-list! sido-code (:id sigu) 20)))
+        (dosync
+          (ref-set courtauctions @(get-auction-list! sido-code (:id sigu) 20))
+          )
+        (println "sido=" sido ", sigu=" sigu ", rows.count=" (count @courtauctions))
+        (doseq [courtauction @courtauctions]
+          (println courtauction)
+          (.add-courtauction dao-impl# courtauction)
+          )
         )
       )
     )
