@@ -53,9 +53,11 @@
         valueInfo (map #(string/trim (first (:content %))) (e/select-nodes* (:content (nth cols 5)) [(e/tag= :div)]))
         auctionInfo (get-auction-info (:content (first (e/select-nodes* (:content (nth cols 6)) [(e/tag= :div)]))))
         status (map #(string/trim %) (filter #(= (map? %) false) (:content (nth cols 7))))
+        now (new java.util.Date)
         ]
     (struct courtauction
             nil 
+            (nth caInfo 0) ;:court
             (nth caInfo 1) ;:caNo
             (string/join " " caInfo) ;:caDesc
             (nth itemInfo 0) ;:itemNo
@@ -73,6 +75,8 @@
             (nth auctionInfo 2) ;:auctionDate
             (nth auctionInfo 3) ;:auctionLoc
             (nth status 0) ;:status
+            now ;:regDate
+            now ;:updDate
             )
     )
   )
@@ -177,8 +181,12 @@
           )
         (println "sido=" sido ", sigu=" sigu ", rows.count=" (count @courtauctions))
         (doseq [courtauction @courtauctions]
-          (println courtauction)
-          (.add-courtauction dao-impl# courtauction)
+          (try
+            (.add-courtauction dao-impl# courtauction)
+            (catch Exception e 
+              (println e courtauction)
+              )
+            )
           )
         )
       )

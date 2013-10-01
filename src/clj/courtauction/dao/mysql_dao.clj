@@ -11,7 +11,8 @@
   (reify 
     courtauction-dao  
     (add-courtauction [this courtauction]
-      (jdbc/insert! db :courtauction { :caNo (:caNo courtauction)
+      (jdbc/insert! db :courtauction {:court (:court courtauction)
+                                      :caNo (:caNo courtauction)
                                       :caDesc (:caDesc courtauction)
                                       :itemNo (:itemNo courtauction)
                                       :itemType (:itemType courtauction)
@@ -28,6 +29,8 @@
                                       :auctionDate (:auctionDate courtauction)
                                       :auctionLoc (:auctionLoc courtauction)
                                       :status (:status courtauction)
+                                      :regDate (:regDate courtauction)
+                                      :updDate (:updDate courtauction)
                                       }
                     )
       )

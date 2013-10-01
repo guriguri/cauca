@@ -9,6 +9,7 @@
 
 CREATE TABLE courtauction (
 	id INT(11) NOT NULL AUTO_INCREMENT,
+	court VARCHAR(16) NOT NULL,
 	caNo VARCHAR(16) NOT NULL,
 	caDesc TEXT,
 	itemNo INT NOT NULL,
@@ -26,7 +27,9 @@ CREATE TABLE courtauction (
 	auctionDate DATE NOT NULL,
 	auctionLoc VARCHAR(64) NOT NULL,
 	status VARCHAR(8) NOT NULL,
+	regDate DATE NOT NULL,
+	updDate DATE NOT NULL,
 	PRIMARY KEY (id)
 );
 
-CREATE UNIQUE INDEX COURTAUCTION_UK_01 ON courtauction (caNo, itemNo);
+CREATE UNIQUE INDEX COURTAUCTION_UK_01 ON courtauction (court, caNo, itemNo);
