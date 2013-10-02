@@ -21,4 +21,9 @@
    :repositories [["java.net" "http://download.java.net/maven/2"]
                  ["conjars" "http://conjars.org/repo"]
                  ] 
+   
+   :jar-exclusions  [#"courtauction-logback.xml"
+                     #"application-context.yaml"]
+   
+   :aot [courtauction.component.crawler]
   )
