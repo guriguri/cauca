@@ -206,6 +206,7 @@
         )
       (log/log-message "sido=" sido ", sigu=" sigu
                        ", rows.count=" (count @courtauctions))
+      (Thread/sleep 1000)
       )
     )
   )
