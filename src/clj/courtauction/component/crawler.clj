@@ -8,6 +8,23 @@
             [net.cgrand.enlive-html :as e] 
             [clojure.string :as string]
             )
+  (:gen-class)
+  )
+
+(defn get-value[coll key]
+  (if (map? coll)
+    (key coll)
+    coll
+    )
+  )
+
+(defn trim[data idx]
+  (if (nil? data)
+    data
+    (if (seq? data)
+      (string/trim (nth data idx))
+      (string/trim data))
+    )
   )
 
 (defn get-addr-info [addr-info]
@@ -28,31 +45,29 @@
     )
   )
 
-(defn get-value[coll key]
-  (if (map? coll)
-    (key coll)
-    coll
-    )
-  )
-
-(defn trim[data idx]
-  (if (nil? data)
-    data
-    (if (seq? data)
-      (string/trim (nth data idx))
-      (string/trim data))
-    )
-  )
-
 (defn set-courtauction [cols]
-  (let [caInfo (map #(trim % 0) (filter #(not-empty (trim % 0)) (map #(get-value % :content) (:content (first (:content (nth cols 1)))))))
-        itemInfo (map #(string/trim %) (filter #(= (map? %) false) (:content (nth cols 2))))
-        addrInfo (get-addr-info (:content (first (e/select-nodes* (:content (nth cols 3)) [(e/tag= :div)]))))
-        addrs (map #(string/trim %) (filter #(not-empty %) (. (first addrInfo) split " ")))
-        remarks (map #(string/trim (string/replace % #"\n" " ")) (:content (nth cols 4)))
-        valueInfo (map #(string/trim (first (:content %))) (e/select-nodes* (:content (nth cols 5)) [(e/tag= :div)]))
-        auctionInfo (get-auction-info (:content (first (e/select-nodes* (:content (nth cols 6)) [(e/tag= :div)]))))
-        status (map #(string/trim %) (filter #(= (map? %) false) (:content (nth cols 7))))
+  (let [caInfo (map #(trim % 0)
+                    (filter #(not-empty (trim % 0))
+                            (map #(get-value % :content)
+                                 (:content (first (:content (nth cols 1)))))))
+        itemInfo (map #(string/trim %)
+                      (filter #(= (map? %) false) (:content (nth cols 2))))
+        addrInfo (get-addr-info
+                   (:content (first
+                               (e/select-nodes*
+                                 (:content (nth cols 3)) [(e/tag= :div)]))))
+        addrs (map #(string/trim %)
+                   (filter #(not-empty %) (. (first addrInfo) split " ")))
+        remarks (map #(string/trim
+                        (string/replace % #"\n" " ")) (:content (nth cols 4)))
+        valueInfo (map #(string/trim (first (:content %)))
+                       (e/select-nodes* (:content (nth cols 5)) [(e/tag= :div)]))
+        auctionInfo (get-auction-info
+                      (:content (first
+                                  (e/select-nodes*
+                                    (:content (nth cols 6)) [(e/tag= :div)]))))
+        status (map #(string/trim %)
+                    (filter #(= (map? %) false) (:content (nth cols 7))))
         now (new java.util.Date)
         ]
     (struct courtauction
@@ -92,8 +107,8 @@
                        (set-courtauction
                          (e/select-nodes* (:content rows) [(e/tag= :td)]))))
         (catch Exception e
-          (println (e/select-nodes* (:content rows) [(e/tag= :td)]))
-          (.printStackTrace e))
+          (log/log-error e (e/select-nodes* (:content rows) [(e/tag= :td)]))
+          )
         )
       )
     courtauctions
@@ -177,29 +192,33 @@
         courtauctions (ref nil)]
     (doseq [sigu @(get-sigu-list! sido-code)]
       (dosync
-        (ref-set courtauctions @(get-auction-list! sido-code (:id sigu) page-size))
+        (ref-set courtauctions
+                 @(get-auction-list! sido-code (:id sigu) page-size))
         )
       (doseq [courtauction @courtauctions]
         (try
           (.add-courtauction dao-impl# courtauction)
           (catch Exception e 
-            (println e courtauction)
+            (if-not (= (.getErrorCode e) 1062)
+              (log/log-error e courtauction))
             )
           )
         )
-      (println "sido=" sido ", sigu=" sigu ", rows.count=" (count @courtauctions))
+      (log/log-message "sido=" sido ", sigu=" sigu
+                       ", rows.count=" (count @courtauctions))
       )
     )
   )
 
 (defn -main
   ([]
-  (log/configure-logback "/courtauction-logback.xml")
-  (config/config-yaml "/application-context.yaml") 
-  (let [dao-impl# (beans/get-obj :courtauction-dao)]
-    (doseq [sido (config/get-value :location.SidoCd)]
-      (add-courtauctions! dao-impl# sido 20)
+    (log/configure-logback "/courtauction-logback.xml")
+    (config/config-yaml "/application-context.yaml") 
+    (log/log-message "START crawler!!!")
+    (let [dao-impl# (beans/get-obj :courtauction-dao)]
+      (doseq [sido (config/get-value :location.SidoCd)]
+        (add-courtauctions! dao-impl# sido 20)
+        )
       )
     )
-  )
   )

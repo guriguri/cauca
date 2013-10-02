@@ -12,14 +12,21 @@
 	  (doseq [line (line-seq rdr)]
 	    (-> sb 
           (.append line) 
-          (.append \newline))))
+          (.append \newline))
+     )
+   )
   (dosync    
-    (ref-set yaml (parse-string (.toString sb)))))
+    (ref-set yaml (parse-string (.toString sb)))
+    )
+  )
 
 (defn config-yaml [path]
   (load-resource yaml read-yaml path))
 
 (defn get-value [key]
-  (when (nil? @yaml) (throw (IllegalAccessError. "Yaml Configuration Not Yet Loaded...")))
+  (when (nil? @yaml)
+    (throw (IllegalAccessError. "Yaml Configuration Not Yet Loaded...")))
   (let [parsed @yaml]
-    (parsed key)))
+    (parsed key)
+    )
+  )

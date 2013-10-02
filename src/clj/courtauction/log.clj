@@ -25,12 +25,12 @@
   (apply log/log-stream args))
 
 (defn configure-logback [path]
-  (def url (get-url path))
-  (def lc (org.slf4j.LoggerFactory/getILoggerFactory))
-  (def configurator (ch.qos.logback.classic.joran.JoranConfigurator.))
-  (.reset lc) 
-  (.setContext configurator lc)
-  (.doConfigure configurator url)  
-  
-  (log-message "logback xml from classpath loaded...")    
+  (let [url (get-url path)
+        lc (org.slf4j.LoggerFactory/getILoggerFactory)
+        conf (ch.qos.logback.classic.joran.JoranConfigurator.)]
+    (.reset lc) 
+    (.setContext conf lc)
+    (.doConfigure conf url)  
+    (log-message "logback xml from classpath loaded...")    
+    )
   )

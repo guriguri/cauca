@@ -25,5 +25,7 @@
 
 (defn get-obj [key] 
   (load-resource beans-map beans)
-  (dosync (get @beans-map key))
+  (dosync
+    (get @beans-map key)
+    )
   )

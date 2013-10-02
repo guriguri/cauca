@@ -8,7 +8,8 @@
 
 (deftest add-courtauction-test 
   (let [dao-impl# (beans/get-obj :courtauction-dao)
-        a-courtauction (struct courtauction nil "court" (.getTime (new java.util.Date))
+        a-courtauction (struct courtauction
+                               nil "court" (.getTime (new java.util.Date))
                                "caDesc" 1 "itemType"
                                "addr0" "addr1" "addr2"
                                "addr" "addrInfo" "remarks"
