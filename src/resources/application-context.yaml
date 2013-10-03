@@ -1,9 +1,12 @@
 ########## These all have default values as shown
 
+db.classname: "com.mysql.jdbc.Driver"
 db.subprotocol: "mysql"
 db.subname: "//courtauction:3306/courtauction"
 db.user: "courtauction"
 db.password: "courtauction.1234"
+db.max.idle.time.excess.connection.sec: 1800
+db.max.idel.time.sec: 10800
 
 location.SidoCd:
     - 11, 서울특별시

@@ -1,7 +1,7 @@
 (ns courtauction.component.crawler
   (:use [courtauction.domain]
     )
-  (:require [courtauction.beans :as beans]
+  (:require [courtauction.factory :as f]
             [courtauction.log :as log]
             [courtauction.config :as config]
             [clj-http.client :as client]
@@ -199,8 +199,11 @@
         (try
           (.add-courtauction dao-impl# courtauction)
           (catch Exception e 
-            (if-not (= (.getErrorCode e) 1062)
-              (log/log-error e courtauction))
+            (if (or
+                  (= (instance? com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) false)
+                  (not= (.getErrorCode e) 1062))
+              (log/log-error e courtauction)
+              )
             )
           )
         )
@@ -216,7 +219,7 @@
     (log/configure-logback "/courtauction-logback.xml")
     (config/config-yaml "/application-context.yaml") 
     (log/log-message "START crawler!!!")
-    (let [dao-impl# (beans/get-obj :courtauction-dao)]
+    (let [dao-impl# (f/get-obj :courtauction-dao)]
       (doseq [sido (config/get-value :location.SidoCd)]
         (add-courtauctions! dao-impl# sido 20)
         )

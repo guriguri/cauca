@@ -16,6 +16,7 @@
                  [enlive "1.0.0"]
                  [org.clojure/java.jdbc "0.3.0-alpha5"]
                  [mysql/mysql-connector-java "5.1.25"]
+                 [c3p0/c3p0 "0.9.1.2"]
                   ]
   
    :repositories [["java.net" "http://download.java.net/maven/2"]

@@ -1,7 +1,8 @@
-(ns courtauction.beans
+(ns courtauction.factory
   (:use [courtauction.util]) 
   (:require [courtauction.log :as log]
             [courtauction.config :as config]
+            [courtauction.db :as db]
             [courtauction.dao.mysql-dao :as dao]
             )
   )
@@ -11,11 +12,7 @@
 (defn- beans []  
   (log/configure-logback "/courtauction-logback.xml")
   (config/config-yaml "/application-context.yaml")
-  (let [db { :subprotocol (config/get-value :db.subprotocol)
-            :subname (config/get-value :db.subname)
-            :user (config/get-value :db.user)
-            :password (config/get-value :db.password) }
-        courtauction-dao (dao/mysql-courtauction-dao db)
+  (let [courtauction-dao (dao/mysql-courtauction-dao)
         add (fn [key obj] (alter beans-map assoc key obj))]      
     (dosync
       (ref-set beans-map {})

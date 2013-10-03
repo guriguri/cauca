@@ -2,12 +2,12 @@
   (:use [clojure test]
         [courtauction.domain]
         ) 
-  (:require [courtauction.beans :as beans]
+  (:require [courtauction.factory :as f]
             )
   )
 
 (deftest add-courtauction-test 
-  (let [dao-impl# (beans/get-obj :courtauction-dao)
+  (let [dao-impl# (f/get-obj :courtauction-dao)
         a-courtauction (struct courtauction
                                nil "court" (.getTime (new java.util.Date))
                                "caDesc" 1 "itemType"

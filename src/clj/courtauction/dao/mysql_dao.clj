@@ -2,16 +2,17 @@
   (:use [courtauction.api.dao]
         [courtauction.domain]
         )
-  (:require [clojure.java.jdbc :as jdbc]
+  (:require [courtauction.db :as db-pool]
+            [clojure.java.jdbc :as jdbc]
             [clojure.java.jdbc.sql :as sql]
             )
  )
 
-(defn mysql-courtauction-dao [db] 
+(defn mysql-courtauction-dao [] 
   (reify 
     courtauction-dao  
     (add-courtauction [this courtauction]
-      (jdbc/insert! db :courtauction {:court (:court courtauction)
+      (jdbc/insert! (db-pool/connection) :courtauction {:court (:court courtauction)
                                       :caNo (:caNo courtauction)
                                       :caDesc (:caDesc courtauction)
                                       :itemNo (:itemNo courtauction)
@@ -35,7 +36,7 @@
                     )
       )
     (get-courtauction [this id]
-      (jdbc/query db
+      (jdbc/query (db-pool/connection)
                   (sql/select * :courtauction (sql/where {:id id}))
                   :identifiers str
                   )
