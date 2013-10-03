@@ -1,13 +1,18 @@
-# countauction
+# 소개
 
-A Clojure library designed to ... well, that part is up to you.
+courtauction은 clojure를 이용해서 법원 경매 사이트를 수집하고, 사용자가 원하는 지역의 경매정보를 취합하여 메일로 보내주는 서비스입니다.
 
-## Usage
+# 사용법
+## crawler
 
-FIXME
+```
+# build
+$> lein do clean, uberjar
+
+# run
+$> cd $COURTAUCTION_HOME/bin/crawler.sh
+```
 
 ## License
 
-Copyright © 2013 FIXME
-
-Distributed under the Eclipse Public License, the same as Clojure.
+Copyright © guriguri
