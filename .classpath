@@ -8,17 +8,7 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="dev-resources">
-		<attributes>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path="src/resources">
-		<attributes>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="target/classes">
 		<attributes>
 			<attribute name="optional" value="true"/>
 		</attributes>
@@ -28,10 +18,5 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="courtauction/target/native/macosx/x86_64"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="classes">
-		<attributes>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
