@@ -4,7 +4,8 @@ export LANG=en_US.UTF-8
 LOG=crawler-`date +%Y%m%d`.log
 
 JARFILE=../target/courtauction-0.1.0-SNAPSHOT-standalone.jar
-CLASSPATH=.:$JARFILE
+CONF=../src/resources
+CLASSPATH=.:$CONF:$JARFILE
 
 JAVA=java
 
