@@ -214,15 +214,41 @@
     )
   )
 
-(defn -main
-  ([]
-    (log/configure-logback "/courtauction-logback.xml")
-    (config/config-yaml "/application-context.yaml") 
-    (log/log-message "START crawler!!!")
-    (let [dao-impl# (f/get-obj :courtauction-dao)]
-      (doseq [sido (config/get-value :location.SidoCd)]
-        (add-courtauctions! dao-impl# sido 20)
+(defn -launch
+  [repeatCnt sleepMsec]
+  (log/configure-logback "/courtauction-logback.xml")
+  (config/config-yaml "/application-context.yaml") 
+  (log/log-message "START crawler!!!")
+  (loop [dao-impl# (f/get-obj :courtauction-dao) cnt 0]
+    (doseq [sido (config/get-value :location.SidoCd)]
+      (add-courtauctions! dao-impl# sido 20)
+      )
+    (if (or (= repeatCnt -1) (< cnt repeatCnt))
+      (do 
+        (Thread/sleep sleepMsec)
+        (recur (f/get-obj :courtauction-dao) (inc cnt))
         )
+      )
+    )
+  )
+
+(defn -main
+  [& args]
+  (let [argsCnt (count args)
+        repeatCnt (ref 1)
+        sleepMsec (ref 1000)]
+    (if (= argsCnt 1)
+      (ref-set repeatCnt (first args))
+      (if (>= argsCnt 2)
+        (do
+          (ref-set repeatCnt (first args))
+          (ref-set sleepMsec (second args))
+          )
+        )
+      )
+    (if (= repeatCnt -1)
+      (.start (Thread. -launch repeatCnt sleepMsec))
+      (-launch repeatCnt sleepMsec)
       )
     )
   )

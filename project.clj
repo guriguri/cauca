@@ -21,12 +21,18 @@
                  [c3p0/c3p0 "0.9.1.2"]
                   ]
   
+   :plugins [[lein-daemon "0.5.4"]]
+  
    :repositories [["java.net" "http://download.java.net/maven/2"]
                  ["conjars" "http://conjars.org/repo"]
                  ] 
    
    :jar-exclusions  [#"courtauction-logback.xml"
                      #"application-context.yaml"]
+   
+   :daemon {:crawler {:ns courtauction.component.crawler
+                      :pidfile "crawler.pid"}
+            }
    
    :aot [courtauction.component.crawler]
   )
