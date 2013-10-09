@@ -239,7 +239,7 @@
   (let [argsCnt (count args)
         repeatCnt (ref 1)
         sleepMsec (ref 1000)]
-    (log/log-message "\n\nUsage: crawler [REPEAT COUNT] [SLEEP SECOND]\n  REPEAT COUNT: -1(infinite), 1, 2, ...\n  SLEEP SECOND: Repeat the cycle")
+    (log/log-message "\n\nUsage: crawler [REPEAT COUNT] [SLEEP SECOND]\n  REPEAT COUNT: -1(infinite), 1, 2, ...\n  SLEEP SECOND: Repeat the cycle\n")
     (dosync
       (if (= argsCnt 1)
         (ref-set repeatCnt (Integer/parseInt (first args)))
