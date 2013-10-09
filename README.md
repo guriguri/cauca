@@ -7,6 +7,7 @@
 * JDK 6+
 * MySQL 5.x
 * [leiningen](http://leiningen.org)
+
 ```
 $> wget --no-check-certificate https://raw.github.com/technomancy/leiningen/stable/bin/lein
 $> mv lein ~/bin/
@@ -17,17 +18,20 @@ $> lein self-install
 ## 환경설정
 * MySQL
  * USER 생성
+
 ```
 mysql> CREATE USER '$CAUCA_USER$'@'%' IDENTIFIED BY '$CAUCA_PASSWORD$';
 mysql> GRANT ALL PRIVILEGES ON cauca.* TO '$CAUCA_USER$'@'%' WITH GRANT option;
 mysql> FLUSH PRIVILEGES;
 ```
  * DATABASE 생성
+
 ```
 mysql> CREATE DATABASE cauca;
 mysql> FLUSH PRIVILEGES;
 ```
 * src/resources/cauca-context.yaml 에서 DB 정보 수정
+
 ```
 :
 db.subname: "//$CAUCA_HOST$:3306/cauca"
@@ -37,6 +41,7 @@ db.password: "$CAUCA_PASSWORD$"
 ```
 
 ## 실행방법
+
 ```
 # build
 $> lein do clean, uberjar
