@@ -1,5 +1,5 @@
-(defproject courtauction "0.1.0-SNAPSHOT"
-  :url "http://github.com/guriguri/courtauction"
+(defproject cauca "0.1.0-SNAPSHOT"
+  :url "http://github.com/guriguri/cauca"
   :license {:name "Apache License, Version 2.0" :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :source-paths ["src/clj"]
   :java-source-paths ["src/java"] 
@@ -27,12 +27,12 @@
                  ["conjars" "http://conjars.org/repo"]
                  ] 
    
-   :jar-exclusions  [#"courtauction-logback.xml"
-                     #"application-context.yaml"]
+   :jar-exclusions  [#"cauca-logback.xml"
+                     #"cauca-context.yaml"]
    
-   :daemon {:crawler {:ns courtauction.component.crawler
+   :daemon {:crawler {:ns cauca.component.crawler
                       :pidfile "crawler.pid"}
             }
    
-   :aot [courtauction.component.crawler]
+   :aot [cauca.component.crawler]
   )
