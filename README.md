@@ -47,6 +47,9 @@ db.password: "$CAUCA_PASSWORD$"
 $> lein do clean, uberjar
 
 # crawler start
+# Usage: lein daemon start crawler [REPEAT COUNT] [SLEEP SECOND]
+#   REPEAT COUNT: -1(infinite), 1, 2, ...
+#   SLEEP SECOND: Repeat the cycle
 $> lein daemon start crawler -1 86400
 
 # crawler stop
