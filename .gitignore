@@ -2,6 +2,7 @@
 /.settings
 **/.settings
 .README*
+/bin
 /target
 **/target
 /lib
