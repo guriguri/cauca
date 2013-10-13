@@ -252,7 +252,7 @@
         )
       )
     (if (= repeatCnt -1)
-      (.start (Thread. -launch repeatCnt sleepMsec))
+      (.start (Thread. -launch @repeatCnt @sleepMsec))
       (-launch @repeatCnt @sleepMsec)
       )
     )
