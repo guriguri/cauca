@@ -19,6 +19,10 @@
                  [org.clojure/java.jdbc "0.3.0-alpha5"]
                  [mysql/mysql-connector-java "5.1.25"]
                  [c3p0/c3p0 "0.9.1.2"]
+                 [compojure "1.1.3"]
+                 [hiccup "0.3.6"]
+                 [ring/ring-devel "0.3.11"]
+                 [ring/ring-jetty-adapter "0.3.11"]
                   ]
   
    :plugins [[lein-daemon "0.5.4"]]
