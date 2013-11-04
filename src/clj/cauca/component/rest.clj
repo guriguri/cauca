@@ -3,8 +3,10 @@
  (:use ring.middleware.reload)
  (:use [hiccup core page-helpers]) 
  (:use [ring.adapter.jetty :only [run-jetty]])
- (:require [compojure.route :as route]
+ (:require [cauca.factory :as f]
+           [compojure.route :as route]
            [compojure.handler :as handler]
+           [clojure.data.json :as json]
            [ring.util.response :as resp]
            )
  (:gen-class))
@@ -28,26 +30,22 @@
  (defn main-page []
    (concat [[:h1 "Cauca Main"]])
    )
+ 
+ (defn my-value-writer [key value]
+  (if (or (= key :auctionDate) (= key :regDate) (= key :updDate))
+    (str (java.sql.Date. (.getTime value)))
+    value))
 
  (defroutes main-routes
    (GET "/" [:as {cookies :cookies}]
         (-> (main-page)
             ui-template))
-;   (GET "/topology/:id/component/:component" [:as {cookies :cookies} id component & m]
-;        (let [include-sys? (get-include-sys? cookies)]
-;          (-> (component-page id component (:window m) include-sys?)
-;              (concat [(mk-system-toggle-button include-sys?)])
-;              ui-template)))
-;   (POST "/topology/:id/rebalance/:wait-time" [id wait-time]
-;     (with-nimbus nimbus
-;       (let [tplg (.getTopologyInfo ^Nimbus$Client nimbus id)
-;             name (.get_name tplg)
-;             options (RebalanceOptions.)]
-;         (.set_wait_secs options (Integer/parseInt wait-time))
-;         (.rebalance nimbus name options)
-;         (log-message "Rebalancing topology '" name "' with wait time: " wait-time " secs")))
-;     (resp/redirect (str "/topology/" id)))
-   (route/resources "/")
+   (GET "/courtauction/:id" [id]
+        (let [dao-impl# (f/get-obj :courtauction-dao)
+              ret-courtauction (first (.get-courtauction dao-impl# id))]
+          (json/write-str ret-courtauction
+                          :value-fn my-value-writer
+                          )))
    (route/not-found "Page not found"))
 
  (defn exception->html [e]

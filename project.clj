@@ -11,6 +11,7 @@
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [junit "4.8"]
                  [org.clojure/tools.logging "0.2.3"]  
+                 [org.clojure/data.json "0.2.3"]
                  [ch.qos.logback/logback-classic "1.0.6"]
                  [org.slf4j/log4j-over-slf4j "1.6.6"]
                  [clj-yaml "0.4.0"]
