@@ -57,12 +57,18 @@
           (-> (resp/response json)
             (resp/content-type "application/json; charset=utf-8"))))
    (GET "/api/courtauction" {params :query-params}
-        (str "itemType:" (params "itemType") "<br/>"
-             "addr0:" (params "addr0") "<br/>"
-             "addr1:" (params "addr1") "<br/>"
-             "value:" (params "value") "<br/>"
-             "valueMin:" (params "valueMin") "<br/>"
-             "auctionDate:" (params "auctionDate")))
+        (let [dao-impl# (f/get-obj :courtauction-dao)
+              ret-courtauction-list (.get-courtauction-list dao-impl# params)
+              json (json/write-str ret-courtauction-list :value-fn cauca-writer :escape-unicode false)]
+          (log/log-message json)
+          (-> (resp/response json)
+            (resp/content-type "application/json; charset=utf-8"))))
+;        (str "itemType:" (params "itemType") "<br/>"
+;             "addr0:" (params "addr0") "<br/>"
+;             "addr1:" (params "addr1") "<br/>"
+;             "value:" (params "value") "<br/>"
+;             "valueMin:" (params "valueMin") "<br/>"
+;             "auctionDate:" (params "auctionDate")))
    (route/not-found "Page not found"))
  
  (def main-handler (-> main-routes handler/api))
@@ -79,7 +85,7 @@
      (try
        (handler request)
        (catch Exception e
-         (-> (resp/response (ui-template "Cauca UI" (exception->html e)))
+         (-> (resp/response (exception->html e))
            (resp/status 500)
            (resp/content-type "text/html"))
          ))))

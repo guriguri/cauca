@@ -41,5 +41,11 @@
                   :identifiers str
                   )
       )
+    (get-courtauction-list [this params]
+      (jdbc/query (db-pool/connection)
+                  ["select * from courtauction limit 10"]
+                  :identifiers str
+                  )
+      )
     )
   )

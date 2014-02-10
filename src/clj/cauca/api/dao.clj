@@ -5,4 +5,5 @@
 (defprotocol courtauction-dao
   (add-courtauction [this courtauction])
   (get-courtauction [this id])
+  (get-courtauction-list [this params])
 )
