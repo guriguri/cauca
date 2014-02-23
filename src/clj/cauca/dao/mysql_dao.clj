@@ -43,7 +43,9 @@
       )
     (get-courtauction-list [this params]
       (jdbc/query (db-pool/connection)
-                  ["select * from courtauction limit 10"]
+                  ["select * from courtauction limit ?, ?"
+                   (:page params)
+                   (:pageSize params)]
                   :identifiers str
                   )
       )
