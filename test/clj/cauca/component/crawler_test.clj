@@ -5,7 +5,6 @@
             [cauca.component.crawler :as crawler]
             [cauca.log :as log]
             [cauca.config :as config]
-            [clj-http.client :as client]
             )
   )
 
