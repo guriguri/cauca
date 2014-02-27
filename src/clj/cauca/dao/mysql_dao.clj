@@ -8,6 +8,16 @@
             )
  )
 
+(defn get-query-str [params]
+  (let [getNum (fn [data default] (if (nil? data) default (if (string? data) (Integer/parseInt data) data)))
+        getVal (fn [data min max] (if (< data min) min (if (> data max) max data)))
+        page (getVal (getNum (params "page") 1) 1 100) 
+        pageSize (getVal (getNum (params "pageSize") 10) 0 100)]
+    (str "select * from courtauction where 1 = 1 "
+         (apply str (map #(str "and " (key %) " = '" (val %) "' ")
+                         (filter #(= (contains? #{"page" "pageSize"} (key %)) false) params)))
+         "limit " (* (- page 1) pageSize) ", " pageSize)))
+
 (defn mysql-courtauction-dao [] 
   (reify 
     courtauction-dao  
@@ -42,10 +52,9 @@
                   )
       )
     (get-courtauction-list [this params]
+      (println (get-query-str params))
       (jdbc/query (db-pool/connection)
-                  ["select * from courtauction limit ?, ?"
-                   (:page params)
-                   (:pageSize params)]
+                  [(get-query-str params)]
                   :identifiers str
                   )
       )

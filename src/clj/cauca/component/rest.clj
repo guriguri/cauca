@@ -63,12 +63,6 @@
           (log/log-message json)
           (-> (resp/response json)
             (resp/content-type "application/json; charset=utf-8"))))
-;        (str "itemType:" (params "itemType") "<br/>"
-;             "addr0:" (params "addr0") "<br/>"
-;             "addr1:" (params "addr1") "<br/>"
-;             "value:" (params "value") "<br/>"
-;             "valueMin:" (params "valueMin") "<br/>"
-;             "auctionDate:" (params "auctionDate")))
    (route/not-found "Page not found"))
  
  (def main-handler (-> main-routes handler/api))
