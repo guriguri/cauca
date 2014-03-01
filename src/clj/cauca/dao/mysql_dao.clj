@@ -5,6 +5,7 @@
   (:require [cauca.db :as db-pool]
             [clojure.java.jdbc :as jdbc]
             [clojure.java.jdbc.sql :as sql]
+            [clojure.string :as string]
             )
  )
 
@@ -13,10 +14,19 @@
         getVal (fn [data min max] (if (< data min) min (if (> data max) max data)))
         page (getVal (getNum (params "page") 1) 1 100) 
         pageSize (getVal (getNum (params "pageSize") 10) 0 100)]
-    (str "select * from courtauction where 1 = 1 "
-         (apply str (map #(str "and " (key %) " = '" (val %) "' ")
-                         (filter #(= (contains? #{"page" "pageSize"} (key %)) false) params)))
-         "limit " (* (- page 1) pageSize) ", " pageSize)))
+    (string/join \newline
+                 ["SELECT * FROM courtauction"
+                  "WHERE 1 = 1"
+                  (string/join
+                    \newline
+                    (map #(str "AND " (key %) " = '" (val %) "'")
+                         (filter #(contains? #{"itemType" "addr0" "addr1"} (key %)) params)))
+                  (if-not (nil? (params "minValue")) (str "AND valueMin >= " (params "minValue"))) 
+                  (if-not (nil? (params "maxValue")) (str "AND valueMin <= " (params "maxValue"))) 
+                  (if-not (nil? (params "auctionStartDate")) (str "AND auctionDate >= '" (params "auctionStartDate") "'")) 
+                  (if-not (nil? (params "auctionEndDate")) (str "AND auctionDate <= '" (params "auctionEndDate") "'")) 
+                  "ORDER BY id DESC"
+                  (str "LIMIT " (* (- page 1) pageSize) ", " pageSize)])))
 
 (defn mysql-courtauction-dao [] 
   (reify 
