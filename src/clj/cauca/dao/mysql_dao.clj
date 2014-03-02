@@ -62,7 +62,6 @@
                   )
       )
     (get-courtauction-list [this params]
-      (println (get-query-str params))
       (jdbc/query (db-pool/connection)
                   [(get-query-str params)]
                   :identifiers str
