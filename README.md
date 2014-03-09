@@ -58,6 +58,7 @@ $> lein daemon stop crawler
 # rest
 ## rest start
 $> lein daemon start rest
+## test main-page: http://127.0.0.1:8080
 ## rest stop
 $> lein daemon stop rest
 
