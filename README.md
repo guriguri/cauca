@@ -46,15 +46,22 @@ db.password: "$CAUCA_PASSWORD$"
 # build
 $> lein do clean, uberjar
 
-# crawler start
-# Usage: lein daemon start crawler [REPEAT COUNT] [SLEEP SECOND]
-#   REPEAT COUNT: -1(infinite), 1, 2, ...
-#   SLEEP SECOND: Repeat the cycle
+# crawler
+## crawler start
+## Usage: lein daemon start crawler [REPEAT COUNT] [SLEEP SECOND]
+##   REPEAT COUNT: -1(infinite), 1, 2, ...
+##   SLEEP SECOND: Repeat the cycle
 $> lein daemon start crawler -1 86400
-
-# crawler stop
+## crawler stop
 $> lein daemon stop crawler
+
+# rest
+## rest start
+$> lein daemon start rest
+## rest stop
+$> lein daemon stop rest
 
 # lein daemon 은 Unix 계열에서만 실행이 되므로 Windows 에서는 uberjar 로 만든 jar 파일을 직접 실행하면 됩니다. 
 $> java -cp .;src\resources;target\cauca-0.1.0-SNAPSHOT-standalone.jar cauca.component.crawler [REPEAT COUNT] [SLEEP SECOND]
+$> java -cp .;src\resources;target\cauca-0.1.0-SNAPSHOT-standalone.jar cauca.component.rest
 ```
