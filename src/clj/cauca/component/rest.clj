@@ -25,7 +25,7 @@
     [:body
      [:h1 "CAUCA API"]
      [:ul 
-      [:li "/api/courtauction"
+      [:li (link-to "/api/courtauction" "/api/courtauction")
        [:ul
         [:li "법원 경매 정보 리스트 조회"]
         [:li "method:get"]
