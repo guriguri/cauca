@@ -13,7 +13,7 @@
   (let [getNum (fn [data default] (if (nil? data) default (if (string? data) (Integer/parseInt data) data)))
         getVal (fn [data min max] (if (< data min) min (if (> data max) max data)))
         page (getVal (getNum (params "page") 1) 1 100) 
-        pageSize (getVal (getNum (params "pageSize") 10) 0 100)]
+        pageSize (getVal (getNum (params "pageSize") 10) 1 100)]
     (string/join \newline
                  ["SELECT * FROM courtauction"
                   "WHERE 1 = 1"
