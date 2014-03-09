@@ -1,4 +1,6 @@
 (ns cauca.util
+  (:require [clojure.string :as string]
+            )
   )
 
 (defmacro load-resource [ref-var & init-fn]
@@ -30,3 +32,27 @@
       )
     )
   )
+
+(defn get-locale [request]
+  (let [locale (ref nil)]
+    (if (and (= (nil? request) false) (= (nil? (first request)) false))
+      (dosync
+        (doseq [[lang, country, variant]
+                (map #(. % split "_")
+                     (map #(string/replace % #"-" "_")
+                          (. (((first request) :headers) "accept-language") split ",; ")))]
+          (if (nil? country)
+            (ref-set locale (new java.util.Locale lang))
+            (if (nil? variant)
+              (ref-set locale (new java.util.Locale lang country))
+              (ref-set locale (new java.util.Locale lang country variant))
+              )
+            )
+          )
+        )
+      )
+    (if (nil? @locale)
+      (java.util.Locale/getDefault)
+      @locale)
+    )
+  ) 

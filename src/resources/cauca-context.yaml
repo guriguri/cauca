@@ -8,6 +8,8 @@ db.password: "cauca.1234"
 db.max.idle.time.excess.connection.sec: 1800
 db.max.idel.time.sec: 10800
 
+spring.contex.path: "classpath:/spring-application-context.xml"
+
 location.SidoCd:
     - 11, 서울특별시
     - 26, 부산광역시

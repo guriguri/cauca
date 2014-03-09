@@ -24,7 +24,8 @@
                  [hiccup "0.3.6"]
                  [ring/ring-devel "0.3.11"]
                  [ring/ring-jetty-adapter "0.3.11"]
-                  ]
+                 [org.springframework/spring-context "3.1.2.RELEASE"]
+                 ]
   
    :plugins [[lein-daemon "0.5.4"]]
   
@@ -35,9 +36,11 @@
    :jar-exclusions  [#"cauca-logback.xml"
                      #"cauca-context.yaml"]
    
-   :daemon {:crawler {:ns cauca.component.crawler
-                      :pidfile "crawler.pid"}
+   :daemon {:crawler {:ns cauca.component.crawler :pidfile "crawler.pid"}
+            :rest {:ns cauca.component.rest :pidfile "rest.pid"}
             }
    
-   :aot [cauca.component.crawler]
+   :aot [cauca.component.crawler
+         cauca.component.rest
+         ]
   )

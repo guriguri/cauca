@@ -23,3 +23,8 @@
 ; number max false  
   (is (= false (validation 4 1 3 nil nil)))
   )
+
+(deftest get-locale-test
+  (is (not= nil (get-locale [{:headers {"accept-language" "ko-kr"}}])))
+  (is (not= nil (get-locale [nil])))
+  ) 
