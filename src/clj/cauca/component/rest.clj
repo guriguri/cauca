@@ -82,8 +82,8 @@
     )
   )
 
-(defn response [json status]
-  (log/log-message json)
+(defn response [uri json status]
+  (log/log-message "uri=" uri ", json=" json)
   (-> (resp/response json)
     (resp/status status)
     (resp/content-type "application/json; charset=utf-8")
@@ -114,24 +114,25 @@
    
 (defroutes main-routes
   (GET "/" [] (main-page))
-  (GET ["/api/courtauction/:id", :id #"[0-9]+"] [id]
+  (GET ["/api/courtauction/:id", :id #"[0-9]+"] [id :as request]
        (let [dao-impl# (f/get-obj :courtauction-dao)
              ret-courtauction (first (.get-courtauction dao-impl# id))
              json (get-json {:msg "ok" :result ret-courtauction})]
-         (response json 200)))
+         (response (request :uri) json 200)))
 ;  (GET "/api/courtauction" {params :query-params}
   (GET "/api/courtauction" request
 ;       (log/log-message request)
        (check-params (request :query-params))
-       (let [params (request :query-params)
-             dao-impl# (f/get-obj :courtauction-dao)
+       (let [dao-impl# (f/get-obj :courtauction-dao)
+             params (request :query-params)
              ret-courtauction-list (.get-courtauction-list dao-impl# params)
              json (get-json {:msg "ok" :result ret-courtauction-list})]
-         (response json 200)))
+         (response (request :uri) json 200)))
   (route/resources "/")
   (route/not-found 
-    (let [json (get-json {:msg (get-msg ["page.not.found"])})]
-      (response json 404)))
+    {:headers {"Content-Type" "application/json; charset=utf-8"}
+     :body (get-json {:msg (get-msg ["page.not.found"])})
+     })
   )
  
 (def main-handler
@@ -142,8 +143,9 @@
     (try
       (handler request)
       (catch Exception e
+        (log/log-error e)
         (let [json (get-json {:msg (get-msg [(.getMessage e)] request)})]
-          (response json 400))
+          (response (request :uri) json 400))
         )
       )
     )
