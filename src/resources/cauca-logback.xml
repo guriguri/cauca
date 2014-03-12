@@ -4,20 +4,33 @@
 		<file>cauca.log</file>
 		<encoder>
 			<charset>UTF-8</charset>
-			<pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+			<pattern>%date %level [%thread] %logger{10} %msg%n</pattern>
 		</encoder>
 	</appender>
 
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<charset>UTF-8</charset>
-			<pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+			<pattern>%date %level [%thread] %logger{10} %msg%n</pattern>
 		</encoder>
 	</appender>
+
+	<appender name="file-daily"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>cauca.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>cauda.log.%d</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%date %level [%thread] %logger{10} %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
 	<root level="INFO">
-	<!--
-		<appender-ref ref="console" />
-	-->
+		<!-- <appender-ref ref="console" /> -->
 		<appender-ref ref="file" />
 	</root>
 </configuration>
