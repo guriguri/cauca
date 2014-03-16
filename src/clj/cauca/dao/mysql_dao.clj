@@ -19,7 +19,7 @@
                   "WHERE 1 = 1"
                   (string/join
                     \newline
-                    (map #(str "AND " (key %) " = '" (val %) "'")
+                    (map #(str "AND " (key %) " IN ( '" (string/replace (val %) #"," "','") "') ")
                          (filter #(contains? #{"itemType" "addr0" "addr1"} (key %)) params)))
                   (if-not (nil? (params "minValue")) (str "AND valueMin >= " (params "minValue"))) 
                   (if-not (nil? (params "maxValue")) (str "AND valueMin <= " (params "maxValue"))) 

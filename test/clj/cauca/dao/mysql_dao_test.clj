@@ -26,9 +26,9 @@
 (deftest get-courtauction-list-test
   (let [dao-impl# (f/get-obj :courtauction-dao)
         ret-courtauction-list (.get-courtauction-list dao-impl#
-                                {"itemType" "아파트"
-                                 "addr0" "서울특별시"
-                                 "addr1" "강남구"
+                                {"itemType" "아파트,임야"
+                                 "addr0" "서울특별시,경기도"
+                                 "addr1" "강남구,군포시"
                                  "page" 0
                                  "pageSize" 10})]
     (println (str "count=" (count ret-courtauction-list)))

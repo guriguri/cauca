@@ -101,9 +101,9 @@
 (defn check-params [params]
   (check-validation (params "page") 1 3 #"[0-9]+" true "invalid.param.page")
   (check-validation (params "pageSize") 1 3 #"[0-9]+" true "invalid.param.pageSize")
-  (check-validation (params "itemType") nil nil #".*[\s~!@#$%^&*()_+`\\=\-{}|\\[\\]:\\\\\";'<>?,./].*" false "invalid.param.itemType")
-  (check-validation (params "addr0") nil nil #".*[\s~!@#$%^&*()_+`\\=\-{}|\\[\\]:\\\\\";'<>?,./].*" false "invalid.param.addr0")
-  (check-validation (params "addr1") nil nil #".*[\s~!@#$%^&*()_+`\\=\-{}|\\[\\]:\\\\\";'<>?,./].*" false "invalid.param.addr1")
+  (check-validation (params "itemType") nil nil #".*[\s~!@#$%^&*()_+`\\=\-{}|\\[\\]:\\\\\";'<>?./].*" false "invalid.param.itemType")
+  (check-validation (params "addr0") nil nil #".*[\s~!@#$%^&*()_+`\\=\-{}|\\[\\]:\\\\\";'<>?./].*" false "invalid.param.addr0")
+  (check-validation (params "addr1") nil nil #".*[\s~!@#$%^&*()_+`\\=\-{}|\\[\\]:\\\\\";'<>?./].*" false "invalid.param.addr1")
   (check-validation (params "auctionStartDate") 9 11 #"20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]" true "invalid.param.auctionStartDate")
   (check-validation (params "auctionEndDate") 9 11 #"20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]" true "invalid.param.auctionEndDate")
   )
