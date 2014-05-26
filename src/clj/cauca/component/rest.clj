@@ -7,6 +7,7 @@
   (:require [cauca.factory :as f]
             [cauca.log :as log]
             [cauca.util :as util]
+            [cauca.config :as config]
             [compojure.route :as route]
             [compojure.handler :as handler]
             [clojure.data.json :as json]
@@ -158,7 +159,8 @@
     catch-errors))
 
 (defn start-server! []
-  (run-jetty app {:port 8080 :join? false})
+  (config/config-yaml "/cauca-context.yaml")
+  (run-jetty app {:port (config/get-value :port) :join? false})
   )
 
 (defn -main []

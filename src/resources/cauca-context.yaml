@@ -8,6 +8,7 @@ db.password: "cauca.1234"
 db.max.idle.time.excess.connection.sec: 1800
 db.max.idel.time.sec: 10800
 
+port: 8080
 spring.contex.path: "classpath:/spring-application-context.xml"
 
 location.SidoCd:
