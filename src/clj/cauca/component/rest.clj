@@ -86,6 +86,7 @@
   (log/log-message "uri=" uri ", json=" json)
   (-> (resp/response json)
     (resp/status status)
+    (resp/header "Access-Control-Allow-Origin" "*")
     (resp/content-type "application/json; charset=utf-8")
     )
   )
