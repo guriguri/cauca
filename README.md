@@ -68,5 +68,7 @@ $> java -cp .;src\resources;target\cauca-0.1.0-SNAPSHOT-standalone.jar cauca.com
 ```
 
 ## Demo
-* Site
-  * [http://100dream.net:8888](http://100dream.net:8888)
+* Screenshot
+  * home ![Alt Text](./img/cauca-01-home.png "home")
+  * /api/countauction ![Alt Text](./img/cauca-02-api_courtauction.png "/api/courtauction")
+  * /api/countauction/:id ![Alt Text](./img/cauca-03-api_courtauction_id.png "/api/courtauction/:id")
